@@ -1,0 +1,2 @@
+fasttext==0.9.1
+pycountry==22.3.5

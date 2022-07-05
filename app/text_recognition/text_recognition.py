@@ -19,7 +19,7 @@ pytesseract.pytesseract.tesseract_cmd =  os.path.join(current_package_path, 'Tes
 
 
 def getTextFromImage(image, net):
-    image = cv2.resize(image, None, fx=2, fy=2)
+    # image = cv2.resize(image, None, fx=2, fy=2)
 
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image = cv2.GaussianBlur(image,(3,3),0)

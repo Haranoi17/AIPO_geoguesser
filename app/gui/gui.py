@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QMessageBox,
 from cv2 import VideoCapture
 from app import run_module
 
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 800
+HEIGHT = 600
 MENU_SPACE = 110
 IMAGE_SPACE_WIDTH = 5
 IMAGE_SPACE_HEIGHT = 75
@@ -34,7 +34,7 @@ class MainGUI(QMainWindow):
         self.pixmap_copy: QPixmap = None
         self.image_label: QLabel = QLabel(self)
         self.text_label: QLabel = QLabel(self)
-        self.prediction_title: str = "Prediction: {}"
+        self.prediction_title: str = "Predictions:\n{}"
         self.prediction_processing: str = "Processing..."
         self.current_prediction = "None"
         self.prediction_fail = "Unknown location"
@@ -45,7 +45,10 @@ class MainGUI(QMainWindow):
     def render_buttons(self):
         current_height = self.height()
         for idx, button in enumerate(self.button_list):
-            button.move(self.width() - MENU_SPACE, (idx + 1) * 0.15 * current_height)
+            button.move(
+                int(self.width() - MENU_SPACE), 
+                int((idx + 1) * 0.15 * current_height)
+            )
             button.show()
 
         self.predict_button.setEnabled(bool(self.current_file))
@@ -53,7 +56,10 @@ class MainGUI(QMainWindow):
     def render_text_label(self, prediction_text: str):
         self.text_label.setMinimumWidth(WIDTH)
         self.text_label.setText(self.prediction_title.format(prediction_text))
-        self.text_label.move(self.width() / 3, self.height() - IMAGE_SPACE_HEIGHT * 0.66)
+        self.text_label.move(
+            int(self.width() / 3), 
+            int(self.height() - IMAGE_SPACE_HEIGHT * 2)
+        )
 
     def resizeEvent(self, a0: QtGui.QResizeEvent):
         if self.pixmap_original:
@@ -75,7 +81,7 @@ class MainGUI(QMainWindow):
     def load_file_dialog(self):
         options = QFileDialog.Options()
         file_name, _ = QFileDialog.getOpenFileName(self, "Load file", "",
-                                                   "JPG Files (*.jpg);;PNG Files (*.png);;MP4 Files (*.mp4)",
+                                                   "MP4 Files (*.mp4);;JPG Files (*.jpg);;PNG Files (*.png)",
                                                     options=options)
         if file_name:
             self.current_file = file_name
@@ -88,11 +94,16 @@ class MainGUI(QMainWindow):
     def predict_action(self):
         self.current_prediction = self.prediction_processing
         self.emit_update()
+        output_text_list = []
         try:
-            country, possibility = run_module(self.current_file)[0]
-            self.current_prediction = f"{country} with {possibility}% confidence"
+            results = run_module(self.current_file)
+            for country, possibility in results:
+                output_text_list.append(f"{country} with {possibility:.2f}% confidence")
+            self.current_prediction = "\n".join(output_text_list)
         except IndexError:
             self.current_prediction = self.prediction_fail
+        except Exception as e:
+            print(e)
         self.emit_update()
 
     def emit_update(self):

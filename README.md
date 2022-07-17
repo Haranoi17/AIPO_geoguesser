@@ -28,8 +28,10 @@ Algorytm przewidywania lokalizacji składa się z kilku modułów. W celu przysp
 
 ### 2.1. Moduł wykrywania tekstu <a name="text_detection"></a>
 
-***coming soon***
-Minimalna wymagana długość słowa jest określona przez `MIN_WORD_LENGTH`.
+Do modułu odpowiedzialnego za wykrywania tekstu wykorzystano biblioteki fastText oraz PyCountry. FastText jest biblioteką opracowaną przez zespół firmy Facebook. Pozwala na klasyfikację tekstu wykorzystując hierachiczne klasyfikatory. Główną zaletą tej biblioteki jest liczba obsługiwanych języków - obecnie 176.
+FastText udostępnia 2 modele do predykcji języka - skompresowany z mniejszą dokładnością oraz pełny. Oba został wytrenowane z wykorzystaniem danych z serwisów takich jak Wikipedia czy Tatoeba. 
+Importując pretrenowany model jesteśmy w stanie (z pewnym błędem) mapować wybraną sekwencję znaków na kod ISO wykrytego języka. Minimalna wymagana długość słowa jest określona przez `MIN_WORD_LENGTH`.
+Dodatkowo biblioteka PyCountry pozwala skonwertować kod ISO na przyjazną użytkownikowi nazwę państwa.
 
 
 ### 2.2. Moduł wykrywania języka <a name="language_detection"></a>
@@ -68,6 +70,7 @@ Wyniki trzymane są w słownikach jako pary/tuple: `(nazwa kraju, zsumowane praw
 * [tqdm](https://tqdm.github.io/) 
 * [PyQt](https://pythonpyqt.com/)
 * [requests](https://pypi.org/project/requests/)
+* [fastText](https://fasttext.cc/)
 
 ---
 

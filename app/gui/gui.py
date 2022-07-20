@@ -97,7 +97,7 @@ class MainGUI(QMainWindow):
         output_text_list = []
         try:
             predictions = run_module(self.current_file)
-            self.current_prediction = ", ".join(f"{country} ({possibility}%)" for country, possibility in predictions)
+            self.current_prediction = ", ".join(f"{country} ({possibility:.2f}%)" for country, possibility in predictions)
         except IndexError:
             self.current_prediction = self.prediction_fail
         except Exception as e:

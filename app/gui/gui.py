@@ -54,11 +54,11 @@ class MainGUI(QMainWindow):
         self.predict_button.setEnabled(bool(self.current_file))
 
     def render_text_label(self, prediction_text: str):
-        self.text_label.setMinimumWidth(WIDTH)
+        self.text_label.setMinimumWidth(self.width())
         self.text_label.setText(self.prediction_title.format(prediction_text))
         self.text_label.move(
-            int(self.width() / 3), 
-            int(self.height() - IMAGE_SPACE_HEIGHT * 2)
+            25, 
+            int(self.height() - IMAGE_SPACE_HEIGHT * 0.66)
         )
 
     def resizeEvent(self, a0: QtGui.QResizeEvent):
@@ -96,10 +96,8 @@ class MainGUI(QMainWindow):
         self.emit_update()
         output_text_list = []
         try:
-            results = run_module(self.current_file)
-            for country, possibility in results:
-                output_text_list.append(f"{country} with {possibility:.2f}% confidence")
-            self.current_prediction = "\n".join(output_text_list)
+            predictions = run_module(self.current_file)
+            self.current_prediction = ", ".join(f"{country} ({possibility}%)" for country, possibility in predictions)
         except IndexError:
             self.current_prediction = self.prediction_fail
         except Exception as e:

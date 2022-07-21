@@ -28,15 +28,15 @@ Algorytm przewidywania lokalizacji składa się z kilku modułów. W celu przysp
 
 ### 2.1. Moduł wykrywania tekstu <a name="text_detection"></a>
 
-Do modułu odpowiedzialnego za wykrywania tekstu wykorzystano biblioteki fastText oraz PyCountry. FastText jest biblioteką opracowaną przez zespół firmy Facebook. Pozwala na klasyfikację tekstu wykorzystując hierachiczne klasyfikatory. Główną zaletą tej biblioteki jest liczba obsługiwanych języków - obecnie 176.
-FastText udostępnia 2 modele do predykcji języka - skompresowany z mniejszą dokładnością oraz pełny. Oba został wytrenowane z wykorzystaniem danych z serwisów takich jak Wikipedia czy Tatoeba. 
-Importując pretrenowany model jesteśmy w stanie (z pewnym błędem) mapować wybraną sekwencję znaków na kod ISO wykrytego języka. Minimalna wymagana długość słowa jest określona przez `MIN_WORD_LENGTH`.
-Dodatkowo biblioteka PyCountry pozwala skonwertować kod ISO na przyjazną użytkownikowi nazwę państwa.
+W celu wykrycia tekstu skorzystano z narzędzia do optycznego rozpoznawania znaków (OCR) - Pytesseract. Potrafi on czytać i rozpoznawać tekst na obrazach i jest powszechnie używany w obrazach do wykrywania tekstu. Obsługuje szeroką gamę języków. Dla zwiększenia efektywności obrazy powinny być wstępnie przetworzone. Klatki zostały przekonwertowane do skali szarości, a następnie zmodyfikowane za pomocą filtru Gaussa. 
 
 
 ### 2.2. Moduł wykrywania języka <a name="language_detection"></a>
 
-***coming soon***
+Do modułu odpowiedzialnego za wykrywania języka wykorzystano biblioteki fastText oraz PyCountry. FastText jest biblioteką opracowaną przez zespół firmy Facebook. Pozwala na klasyfikację tekstu wykorzystując hierachiczne klasyfikatory. Główną zaletą tej biblioteki jest liczba obsługiwanych języków - obecnie 176.
+FastText udostępnia 2 modele do predykcji języka - skompresowany z mniejszą dokładnością oraz pełny. Oba został wytrenowane z wykorzystaniem danych z serwisów takich jak Wikipedia czy Tatoeba. 
+Importując pretrenowany model jesteśmy w stanie (z pewnym błędem) mapować wybraną sekwencję znaków na kod ISO wykrytego języka. Minimalna wymagana długość słowa jest określona przez `MIN_WORD_LENGTH`.\n
+Dodatkowo biblioteka PyCountry pozwala skonwertować kod ISO na przyjazną użytkownikowi nazwę państwa.
 Język angielski występuje powszechnie, dlatego zdecydowano się na osłabienie jego wagi (stała `WEAKEN_ENGLISH_CONTANT`). Dodatkowo prawdopodobieństwo wykrytego języka nie może być mniejsze niż określone przez `LANGUAGE_ACCURACY_THRESHOLD`, a całkowita liczba wykryć danego języka powinna być równa co najmniej `MINIMAL_NUMBER_OF_LANGUAGE_ENTRIES` razy.
 
 

@@ -10,7 +10,7 @@ import numpy as np
 import utils
 from constants import *
 from tqdm import tqdm
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
 
 LANGUAGE = language_detection.LanguageIdentification()
 
@@ -133,18 +133,19 @@ def make_prediction(language_results:Dict, plate_code_results:Dict):
         )
     return results
 
-if __name__ == '__main__':
-    language_results, plate_code_results = process_video('dataset/Rotterdam.mp4')
-    # language_results, plate_code_results = process_image('dataset/nazwa.png')
-    results = make_prediction(language_results, plate_code_results)
-    # print(f"{language_results = }")
-    # print()
-    # print(f"{plate_code_results = }")
-    # print()
-    try:
-        del language_results
-        del plate_code_results
-    except Exception as e:
-        print(e)
+
+def run_module(filename: str) -> List[Tuple[str, float]]:
+    # filename = 'dataset/Rotterdam.mp4'
+    if filename.endswith("mp4"):
+        process_function = process_video
+    else:
+        process_function = process_image
+
+    results = make_prediction(*process_function(filename))
 
     print(f"{results = }")
+    return results
+
+
+if __name__ == '__main__':
+    run_module('dataset/Rotterdam.mp4')
